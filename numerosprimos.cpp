@@ -1,3 +1,6 @@
+/*---------------------------------------------------------------*/
+/*			Solucion en C++			   	*/
+/*--------------------------------------------------------------*/
 #include <iostream>
 #include <vector>
 
@@ -34,6 +37,9 @@ int main() {
     return 0;
 }
 
+/*--------------------------------------------------------------*/
+/*                     Seccion de codigo ARM			*/
+/*--------------------------------------------------------------*/
 @ r1 points to address of "prime"
 @ r3 number we are checking 	(N in Knuth)
 @ r4 count of primes		(J in Knuth)
