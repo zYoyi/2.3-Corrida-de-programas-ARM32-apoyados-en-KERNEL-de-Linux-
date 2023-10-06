@@ -1,8 +1,9 @@
-int main() {
-    std::string nombre;
-    std::cout << "Por favor, ingrese su nombre: ";
-    std::cin >> nombre;
-    std::cout << "Hola, " << nombre << "! Bienvenido a este programa." << std::endl;
+#include <iostream>
 
+int main() {
+    int num = 0;
+    std::cout << "> ";
+    std::cin >> num;
+    std::cout << "your input: " << num << std::endl;
     return 0;
 }
