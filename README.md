@@ -25,3 +25,5 @@ Corrida de programas ARM32
 
 Estudiante:
 Ortega Jimenez Jordi Joel
+
+</p align=center>
