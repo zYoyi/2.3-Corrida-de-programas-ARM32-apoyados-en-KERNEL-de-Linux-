@@ -1,36 +1,67 @@
+@-----------------------------------------------
+    CODIGO EN C++
+@-----------------------------------------------
 #include <iostream>
-#include <cstdlib> // Necesario para funciones de generación de números aleatorios
-#include <ctime>   // Necesario para inicializar la semilla del generador de números aleatorios
+#include <climits> // Para usar INT_MAX
 
 int main() {
-    // Inicializar la semilla del generador de números aleatorios
-    std::srand(static_cast<unsigned int>(std::time(nullptr)));
+    int valores[] = {8, 10, -3, 4, -5, 50, 2, 3};
+    int longitud = sizeof(valores) / sizeof(valores[0]);
 
-    // Declarar un arreglo para almacenar los números aleatorios
-    int numeros[10];
+    int minimo = INT_MAX; // Inicializamos minimo con el valor máximo posible
 
-    // Generar 10 números aleatorios y almacenarlos en el arreglo
-    for (int i = 0; i < 10; ++i) {
-        numeros[i] = std::rand() % 100; // Números aleatorios en el rango de 0 a 99
-    }
-
-    // Encontrar el número más grande en el arreglo
-    int maximo = numeros[0]; // Suponemos que el primer número es el más grande
-
-    for (int i = 1; i < 10; ++i) {
-        if (numeros[i] > maximo) {
-            maximo = numeros[i];
+    for (int i = 0; i < longitud; ++i) {
+        if (valores[i] < minimo) {
+            minimo = valores[i];
         }
     }
 
-    // Imprimir el número más grande
-    std::cout << "Los números generados son: ";
-    for (int i = 0; i < 10; ++i) {
-        std::cout << numeros[i] << " ";
-    }
-    std::cout << std::endl;
-
-    std::cout << "El número más grande es: " << maximo << std::endl;
+    std::cout << "El valor mínimo en el arreglo es: " << minimo << std::endl;
 
     return 0;
 }
+
+
+@ DATA SECTION
+
+.data
+string:	.asciz	"%d\n"				@ formato para imprimir resultado
+vect:	.word	8, 10, -3, 4, -5, 50, 2, 3	@ arreglo de valores
+
+@ CODE SECTION
+
+.text
+.extern printf			@ funcion externa de C
+.global main			@ punto inicial de ejecucion
+
+main:
+	push	{r0, r1}	@ valores que queremos regresar a su valor inicial
+	ldr	r0, =vect	@ cargar los valores del arreglo al registro r0
+	mov	r1, #8		@ cuantos valores
+	mov	r8, #4		@ recorrido del arreglo de uno en uno
+loop:
+	ldr	r4, [r0]	@ inicio del loop y carga del primer valor: min
+	ldr	r5, [r0, #4]	@ carga del segundo valor a comparar: v[i]
+	mov	r6, #1		@ inicio del contador i=1
+if:
+	cmp 	r5, r4		@ v[i]<min ???
+	blt	new_min		@ TRUE
+else:
+	add	r6, r6, #1	@ FALSE: i++
+	b	new_iter	@ continuar...
+new_min:
+        mov     r4, r5		@ min=v[i]
+        add     r6, r6, #1	@ i++
+        b       new_iter	@ continuar...
+new_iter:
+        cmp     r6, r1		@ caso general del loop: i<8
+        beq     _end		@ FALSE
+        mul     r7, r6, r8	@ TRUE: cambio del indice del arreglo
+        ldr     r5, [r0, r7]	@ v[i] -> r5
+        b       if		@
+_end:
+	ldr	r0, =string	@ carga de caracteres del string
+	mov	r1, r4		@ valor a imprimir con formato en la consola
+	bl	printf		@ printf() de C
+	pop	{r0, r1}	@ recuperacion de valores iniciales
+	bx	lr		@ BREAK
