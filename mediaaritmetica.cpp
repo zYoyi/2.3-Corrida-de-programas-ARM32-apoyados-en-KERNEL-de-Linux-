@@ -1,37 +1,88 @@
+/*---------------------------------------------------------------*/
+/*			Solucion en C			   	*/
+/*--------------------------------------------------------------*/
 #include <iostream>
-#include <cstdlib> // Necesario para funciones de generación de números aleatorios
-#include <ctime>   // Necesario para inicializar la semilla del generador de números aleatorios
 
 int main() {
-    // Inicializar la semilla del generador de números aleatorios
-    std::srand(static_cast<unsigned int>(std::time(nullptr)));
-
-    // Declarar un arreglo para almacenar los números aleatorios
-    int numeros[10];
-
-    // Generar 10 números aleatorios y almacenarlos en el arreglo
-    for (int i = 0; i < 10; ++i) {
-        numeros[i] = std::rand() % 100; // Números aleatorios en el rango de 0 a 99
-    }
-
-    // Calcular la suma de los números en el arreglo
+    int pares[5][2] = {{10, 20}, {5, 15}, {8, 12}, {25, 35}, {30, 40}};
     int suma = 0;
-    for (int i = 0; i < 10; ++i) {
-        suma += numeros[i];
+
+    for (int i = 0; i < 5; ++i) {
+        int valor1 = pares[i][0];
+        int valor2 = pares[i][1];
+        int media = (valor1 + valor2) / 2;
+        suma += media;
     }
 
-    // Calcular la media aritmética
-    double media = static_cast<double>(suma) / 10.0;
+    int media_aritmetica = suma / 5;
 
-    // Imprimir los números generados y la media aritmética
-    std::cout << "Los números generados son: ";
-    for (int i = 0; i < 10; ++i) {
-        std::cout << numeros[i] << " ";
-    }
-    std::cout << std::endl;
-
-    std::cout << "La media aritmética es: " << media << std::endl;
+    std::cout << "La media aritmética de los pares de valores es: " << media_aritmetica << std::endl;
 
     return 0;
 }
 
+/*--------------------------------------------------------------*/
+/*			Seccion  de datos			*/
+/*--------------------------------------------------------------*/
+@ DATA SECTION
+
+.data
+string:	.asciz	"%d\n"
+
+
+/*--------------------------------------------------------------*/
+/*                     Seccion de codigo			*/
+/*--------------------------------------------------------------*/
+@ CODE SECTION
+
+.text
+.extern printf
+.global main
+main:
+	@ primera ...
+	push	{r0, r1}	@ almacenamiento de valores iniciales
+	mov 	r0, #3
+	mov 	r1, #2
+	add 	r2, r0, r1	@ (r0+r1)
+	mov 	r2, r2, LSR #1	@ (r0+r1)/2
+	mov 	r1, r2		@ impresion del resultado...
+	ldr 	r0, =string
+	bl	printf
+
+	@ segunda ...
+        mov     r0, #4
+        mov     r1, #6
+        add     r2, r0, r1
+        mov     r2, r2, LSR #1
+        mov     r1, r2
+        ldr     r0, =string
+        bl      printf
+
+	@ tercera ...
+        mov     r0, #7
+        mov     r1, #2
+        add     r2, r0, r1
+        mov     r2, r2, LSR #1
+        mov     r1, r2
+        ldr     r0, =string
+        bl      printf
+
+	@ cuarta ...
+        mov     r0, #0
+        mov     r1, #3
+        add     r2, r0, r1
+        mov     r2, r2, LSR #1
+        mov     r1, r2
+        ldr     r0, =string
+        bl      printf
+
+	@ quinta ...
+        mov     r0, #3
+        mov     r1, #5
+        add     r2, r0, r1
+        mov     r2, r2, LSR #1
+        mov     r1, r2
+        ldr     r0, =string
+        bl      printf
+	pop	{r0, r1}	@ recuperacion de estados iniciales para salir
+	bx	lr		@ BREAK
